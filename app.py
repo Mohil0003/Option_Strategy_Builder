@@ -90,7 +90,7 @@ def find_breakeven_points(payoff: np.ndarray, spot_prices: np.ndarray, tolerance
     
     return list(set(breakeven_points))  # Remove duplicates
 
-def create_payoff_chart(spot_prices: np.ndarray, payoff: np.ndarray, strategy_name: str) -> go.Figure:
+def create_payoff_chart(spot_prices: np.ndarray, payoff: np.ndarray, strategy_name: str, currency_symbol: str) -> go.Figure:
     """Create an interactive payoff chart using Plotly."""
     fig = go.Figure()
     
@@ -116,8 +116,8 @@ def create_payoff_chart(spot_prices: np.ndarray, payoff: np.ndarray, strategy_na
             x=0.5,
             font=dict(size=20, color='#2C3E50')
         ),
-        xaxis_title='Spot Price ($)',
-        yaxis_title='Net P/L ($)',
+        xaxis_title=f'Spot Price ({currency_symbol})',
+        yaxis_title=f'Net P/L ({currency_symbol})',
         hovermode='x unified',
         showlegend=True,
         height=600,
@@ -141,32 +141,32 @@ def create_payoff_chart(spot_prices: np.ndarray, payoff: np.ndarray, strategy_na
     
     return fig
 
-def display_summary(payoff: np.ndarray, breakeven_points: List[float]):
+def display_summary(payoff: np.ndarray, breakeven_points: List[float], currency_symbol: str):
     """Display strategy summary with max profit, max loss, and breakeven points."""
     max_profit = np.max(payoff)
     max_loss = np.min(payoff)
-    
+
     st.subheader("📊 Strategy Summary")
-    
+
     col1, col2, col3 = st.columns(3)
-    
+
     with col1:
         st.metric(
             "💰 Max Profit", 
-            f"${max_profit:.2f}",
+            f"{currency_symbol}{max_profit:.2f}",
             delta_color="normal" if max_profit > 0 else "inverse"
         )
-    
+
     with col2:
         st.metric(
             "📉 Max Loss", 
-            f"${max_loss:.2f}",
+            f"{currency_symbol}{max_loss:.2f}",
             delta_color="inverse" if max_loss < 0 else "normal"
         )
-    
+
     with col3:
         if breakeven_points:
-            be_text = ", ".join([f"${be:.2f}" for be in breakeven_points])
+            be_text = ", ".join([f"{currency_symbol}{be:.2f}" for be in breakeven_points])
             st.metric("⚖️ Breakeven Point(s)", be_text)
         else:
             st.metric("⚖️ Breakeven Point(s)", "None")
@@ -178,6 +178,9 @@ strategy = st.sidebar.selectbox(
     ["Bull Call Spread", "Iron Condor"],
     help="Select the options strategy to simulate"
 )
+
+# Set currency_symbol directly
+currency_symbol = "₹"
 
 # Add spacing
 st.sidebar.markdown("---")
@@ -261,11 +264,11 @@ if strategy == "Bull Call Spread":
             # Create and display chart
             st.markdown("---")
             st.subheader("📊 Payoff Visualization")
-            fig = create_payoff_chart(spot_prices, payoff, "Bull Call Spread")
+            fig = create_payoff_chart(spot_prices, payoff, "Bull Call Spread", currency_symbol)
             st.plotly_chart(fig, use_container_width=True)
             
             # Display summary
-            display_summary(payoff, breakeven_points)
+            display_summary(payoff, breakeven_points, currency_symbol)
 
 elif strategy == "Iron Condor":
     st.header("🦅 Iron Condor Strategy")
@@ -379,12 +382,12 @@ elif strategy == "Iron Condor":
             # Create and display chart
             st.markdown("---")
             st.subheader("📊 Payoff Visualization")
-            fig = create_payoff_chart(spot_prices, payoff, "Iron Condor")
+            fig = create_payoff_chart(spot_prices, payoff, "Iron Condor", currency_symbol)
             st.plotly_chart(fig, use_container_width=True)
             
             # Display summary
-            display_summary(payoff, breakeven_points)
+            display_summary(payoff, breakeven_points, currency_symbol)
 
 # Footer
 st.markdown("---")
-st.markdown("**Disclaimer:** This simulator is for educational purposes only. Options trading involves substantial risk and may not be suitable for all investors.") 
+st.markdown("**Disclaimer:** This simulator is for educational purposes only. Options trading involves substantial risk and may not be suitable for all investors.")
