@@ -107,29 +107,19 @@ The app includes validation to ensure:
   - Buy 1 Call (highest strike, pay premium)
 
 - **Net Premium Received:**  
-  \[
-  \text{Net Premium Received} = (\text{Sell Put Premium} + \text{Sell Call Premium}) - (\text{Buy Put Premium} + \text{Buy Call Premium})
-  \]
+  Net Premium Received = (Sell Put Premium + Sell Call Premium) − (Buy Put Premium + Buy Call Premium)
 
 - **Maximum Profit:**  
-  \[
-  \text{Max Profit} = \text{Net Premium Received}
-  \]
+  Max Profit = Net Premium Received  
   (Occurs if spot price is between the two middle strikes at expiry)
 
 - **Maximum Loss:**  
-  \[
-  \text{Max Loss} = (\text{Difference between adjacent strikes}) - \text{Net Premium Received}
-  \]
+  Max Loss = (Difference between adjacent strikes) − Net Premium Received  
   (Occurs if spot price is below lowest or above highest strike at expiry)
 
 - **Breakeven Points:**  
-  \[
-  \text{Lower Breakeven} = \text{Lower Put Strike} + \text{Net Premium Received}
-  \]
-  \[
-  \text{Upper Breakeven} = \text{Upper Call Strike} - \text{Net Premium Received}
-  \]
+  Lower Breakeven = Lower Put Strike + Net Premium Received  
+  Upper Breakeven = Upper Call Strike − Net Premium
 
 ## Disclaimer
 
